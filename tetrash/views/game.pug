@@ -1,0 +1,19 @@
+extends layout
+
+block content
+    div.game-layout
+        div(id="rules")
+            p regles du jeu : blahblahblah
+            p controles : < >
+            p vous avez recyclé 3 tonnes de déchets
+            p Prochaine pièce : Canapé-lit de l'aius
+        div(id="game")
+
+        div(id="leaderboard")
+            p Ils ont sauvé la planète :
+            ul
+                li Moi
+                li Toi
+                li Pas toi
+                li Ni lui
+    script(type="module" src='/javascripts/game.js')
