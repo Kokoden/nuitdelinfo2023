@@ -23,3 +23,15 @@ a {
   background-color: gray;
   height: 400px;
 }
+
+#winOverlay {
+  display: flex;
+  position: absolute;
+  background-color: rgba(5, 5, 5, 0.95);
+  width: 100vw;
+  height: 100vh;
+  flex-direction: column;
+  top: 0;
+  align-content: center;
+  align-items: center;
+}

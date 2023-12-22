@@ -3,17 +3,26 @@ extends layout
 block content
     div.game-layout
         div(id="rules")
-            p regles du jeu : blahblahblah
-            p controles : < >
-            p vous avez recyclé 3 tonnes de déchets
-            p Prochaine pièce : Canapé-lit de l'aius
+            p Le compacteur de déchets ne fonctionne que lorsqu'une ligne est pleine.
+            p Compactez un maximum de déchets
+            p controles :
+            p Flèche haut : tourner la pièce
+            p Flèche bas : accélérer
+            p Flèches droite et gauche : déplacements horizontaux
+            p(id="score") Vous n'avez recyclé aucun déchet
+            p Prochaine pièce :
+            img(id="next")
         div(id="game")
 
         div(id="leaderboard")
             p Ils ont sauvé la planète :
             ul
-                li Moi
-                li Toi
-                li Pas toi
-                li Ni lui
+                each winner in winners
+                    li= winner
+        div(id="winOverlay", style="display: none")
+            h1 Bravo vous avez sauvé le monde !!!
+            h2 Sauvegardez votre nom dans l'historique des superhéros broyeurs de détritus
+            input(id="name", type="text")
+            button(id="sendHighscore") Envoyer !
+
     script(type="module" src='/javascripts/game.js')

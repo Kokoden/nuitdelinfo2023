@@ -1,11 +1,19 @@
 import {makeL2, makeL, Piece, makeS, makeT, makeCube, makeBar, makeZ, randomPiece, rotate2D} from "./piece.js"
 
 class Scene {
+
+    constructor(destroyLineCallback, loseCallback, nextCallback) {
+        this.destroyLineCallback = destroyLineCallback;
+        this.loseCallback = loseCallback;
+        this.nextCallback = nextCallback;
+    }
+
     reset(width, height) {
         this.width = width;
         this.height = height;
         this.grid = {}
         this.currentPiece = this.insertPiece(randomPiece(this));
+        this.next = randomPiece(this);
         this.game = document.getElementById("game");
         this.backgroundCanvas = document.createElement('canvas');
         this.backgroundCanvas.width = this.game.offsetWidth;
@@ -13,7 +21,6 @@ class Scene {
         this.backgroundCanvas.style.position = 'absolute';
         this.backgroundCanvasCtx = this.backgroundCanvas.getContext("2d");
         this.game.appendChild(this.backgroundCanvas)
-
     }
 
     /**
@@ -21,6 +28,8 @@ class Scene {
      */
     insertPiece(piece) {
         piece.moveTo({x: this.width / 2, y: this.height})
+        if (!this.canMovePieceToPosition(piece, piece.position))
+            this.loseCallback();
         return piece;
     }
 
@@ -32,7 +41,9 @@ class Scene {
             } else {
                 this.placePiece(this.currentPiece);
                 this.checkAndMoveLines();
-                this.currentPiece = this.insertPiece(randomPiece(this));
+                this.currentPiece = this.insertPiece(this.next);
+                this.next = randomPiece(this);
+                this.nextCallback(this.next);
             }
         }
     }
@@ -82,8 +93,7 @@ class Scene {
 
                 this.backgroundCanvasCtx.clearRect(0, 0, this.game.offsetWidth, this.game.offsetHeight - this.game.offsetHeight / this.height * (y - 1));
                 this.backgroundCanvasCtx.putImageData(data, 0, this.game.offsetHeight / this.height);
-
-                console.log("WOUHOU x10")
+                this.destroyLineCallback();
                 for (let u = y + 1; u < this.height; ++u) {
                     if (!this.grid[u])
                         continue;
